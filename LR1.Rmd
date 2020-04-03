@@ -1,0 +1,85 @@
+## Поиск информации о компании
+
+### Цель
+Собрать информацию о компаниях
+
+### Исходные данные
+. Названия компаний:
+
+  * Lockheed Martin Corporation
+  * Costco Wholesale Corporation
+  * Morgan Stanley
+  * PNC Financial Services Group Inc.
+  * Eli Lilly and Company
+️
+
+### Решение
+1. https://who.is
+2. https://2ip.ru/
+3. https://reg.ru/whois/
+4. http://whois-service.ru
+
+
+| Признак           | Значение      |
+| ----------------- |:-------------:|
+| Название компании | Lockheed Martin Corporation |
+| Сайт              | https://www.lockheedmartin.com  166.23.250.209|
+| IP Netblock       | 166.21.0.0 - 166.31.255.255 |
+| Местоположение    | Бетесда, Мэриленд, США|
+| Телефон           | 8887802723|
+| e-mail            | domainabuse@cscglobal.com  |
+| Хостинг           | Lockheed Martin Corporation|
+| Порты             | 80, 443, 8080|
+| Web-технологии    | Apache, Java, jQuery, IBM WebSphere Commerce, reCAPCHA|
+
+| Признак           | Значение      |
+| ----------------- |:-------------:|
+| Название компании | Costco Wholesale Corporation |
+| Сайт              | https://www.costco.com   23.37.38.56  |
+| IP Netblock       | 23.37.32.0 - 23.37.47.255 |
+| Местоположение    | Иссакуа, Вашингтон, США   |
+| Телефон           | 972-995-2011      |
+| e-mail            | lm-nic@lmco.com    |
+| Хостинг           | GKG.NET, INC      |
+| Порты             | 80, 443       |
+| Web-технологии    | Apache, Java, jQuery, TrackJs, OpenSSL, FrontPage|
+
+| Признак           | Значение      |
+| ----------------- |:-------------:|
+| Название компании | Morgan Stanley |
+| Сайт              | http://www.morganstanley.ru   95.101.72.139   |
+| IP Netblock       | 95.101.72.0 - 95.101.75.255  |
+| Местоположение    | United States      |
+| Телефон           | +1-617-938-3130|
+| e-mail            | dns.admin@BMS.COM      |
+| Хостинг           | Akamai Technologies  |
+| Порты             | 80,443     |
+| Web-технологии    | Java, Google Font API, Adobe DTM, jQuery, SiteCatalyst, AdobeExperience Manager|
+
+| Признак           | Значение      |
+| ----------------- |:-------------:|
+| Название компании | PNC Financial Services Group Inc. |
+| Сайт              | https://www.pnc.com   23.67.141.197|
+| IP Netblock       | 23.32.0.0 - 23.67.255.255 |
+| Местоположение    | Питтсбург, Пенсильвания, США |
+| Телефон           | +1-617-444-0017  |
+| e-mail            | ip-admin@akamai.com |
+| Хостинг           | Domain Administrator |
+| Порты             | 80, 443      |
+| Web-технологии    | Apache, AgularJS, Googl Tag Manager, Moment.js, webpack, Pygments, Python, Perl, Font Awesome, Marketo, OpenSSL, Vue.js, React, Bootstrap, SiteCatalyst|
+
+| Признак           | Значение      |
+| ----------------- |:-------------:|
+| Название компании | Eli Lilly and Company |
+| Сайт              | https://www.up.com/index.htm    52.87.62.207|
+| IP Netblock       | 34.192.0.0 - 34.255.255.255 |
+| Местоположение    | Индианаполис, Индиана, США  |
+| Телефон           | +1-206-266-4064  |
+| e-mail            |  aws-routing-poc@amazon.com |
+| Хостинг           | Direct Allocation  |
+| Порты             | 80, 443     |
+| Web-технологии    | Apache, Java, TypeKit, FancyBox, Oracle Dynamic Monitoring Service, Linkedin, jQuery, Adobe ColdFusion, Slick, CFML|
+
+
+### Вывод:
+С помощью готовых решений и утилиты nmap я проанализировал сайты и нашел информацию о них
