@@ -1,0 +1,167 @@
+---
+title: "LR3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Исследование возможностей автоматизации сбора данных о доменах.
+### Цель:
+Собрать информацию о топ 15 доменах в категорий Usenet
+
+### Используемое ПО:
+1.Rstudio IDE    
+2.nmap      
+3.dig        
+4.whois   
+5.whatweb
+
+### Варианты решения задачи:
+1.Использовать интегрированные инструменты такие как Maltego CE, Recon-ng.    
+2.Разработать автоматизированное решение для сбора информации.    
+
+### Содержание лабораторной работы:
+В данной лабораторной работе используется 2ой вариант решения задачи. Соберем необходимую информацию автоматизированным способом.
+
+
+```{r, cash=TRUE}
+library(tidyverse)
+library(rappalyzer)
+get_sum_df <- function(company_url) {
+  country_state <- NA
+  dig <- system2('dig', company_url, stdout = TRUE)
+  ip <- dig %>%
+    grep(pattern = company_url, value = TRUE) %>%
+    str_extract(pattern = "\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b")
+  ip <- ip[!is.na(ip)]
+  
+  whois <- system2('whois', ip[1], stdout = TRUE)
+  phones <- whois %>%
+    grep(pattern = "Phone", value = TRUE, ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ") %>%
+    data.table::transpose() %>%
+    .[[2]] %>%
+    unique() %>%
+    str_c(collapse = " ")
+  
+  netblock <- whois %>%
+    grep(pattern = "CIDR", value = TRUE, ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ", simplify = TRUE) %>%
+    .[-1] %>%
+    str_c(collapse = " ")
+  
+  country <- whois %>%
+    grep(pattern = "Country",
+         value = TRUE,
+         ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ", simplify = TRUE) %>%
+    .[-1]
+  
+  country_state <- whois %>%
+    grep(pattern = "State",
+         value = TRUE,
+         ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ", simplify = TRUE) %>%
+    .[-1]
+  if(length(country_state)==0) country_state <- NA
+  
+  address <- whois %>%
+    grep(pattern = "address",
+         value = TRUE,
+         ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ", simplify = TRUE) %>%
+    .[-1] %>%
+    str_c(collapse = " ")
+  
+  hosting <- whois %>%
+    grep(pattern = "Hosting",
+         value = TRUE,
+         ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ")
+  hosting <- lapply(hosting, collapse = " ", str_c) %>%
+    str_c(collapse = " ")
+  
+  nmap <-
+    system2('nmap',
+            args = c('-p', '22,21,80,443', ip[1]),
+            stdout = TRUE)
+  ports <- nmap %>%
+    grep(pattern = "open",
+         value = TRUE,
+         ignore.case = TRUE) %>%
+    str_squish() %>%
+    str_split(pattern = " ") %>%
+    data.table::transpose() %>%
+    .[[1]] %>%
+    str_c(collapse = " ")
+  ip <- str_c(ip,collapse = ' ')
+  company_sum <-
+    data.frame(
+      csum = c(
+        company_url,
+        ip,
+        netblock,
+        country,
+        country_state,
+        address,
+        phones,
+        hosting,
+        ports
+      ),
+      row.names = c(
+        'company_url',
+        'ip',
+        'netblock',
+        'country',
+        'country_state',
+        'address',
+        'phones',
+        'hosting',
+        'ports'
+      )
+    )
+  company_sum
+  
+}
+urls <- c("Nzbindex.nl", "Usenext.de", "Markmail.org", "Newsgroupreviews.com", "Nzbindex.nl", "Usenext.de", "Newsdemon.com", "Djangoproject.com", "Eclipse.org", 
+          "Asp.net", "Newrelic.com", 
+          "Jsfiddle.net", "Sas.com")
+  
+dfs <- lapply(urls, get_sum_df) # применение полученной функции к вектору, на выходе функции - список из одноколоночных датафреймов
+result <- bind_cols(dfs) # объединение в один датафрейм
+# задаем названия строк
+row.names(result) <- c('company_url',
+        'ip',
+        'netblock',
+        'country',
+        'country_state',
+        'address',
+        'phones',
+        'hosting',
+        'ports'
+      )
+# задаем названия столбцов из первой строки полученного датафрейма (предварительно переведя в тип character)
+colnames(result) <- map(result[1,],as.character) %>% unlist()
+# удалим теперь первую строку таблицы - она дублирует названия столбцов
+result <- result[-1,]
+# Выводим таблицу
+knitr::kable(result)
+for(i in urls) { 
+  print(i)
+  print(rappalyze(i))
+}
+```
+
+### Оценка результата
+Мы получили информацию по адресам и можем применять этот способ вновь
+
+### Вывод   
+В ходе лабораторной работы мы научились автоматизированно собирать информацию о доменах в автоматическом режиме 
